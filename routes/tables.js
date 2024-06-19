@@ -544,6 +544,15 @@ export const tableInitialization = async (classes, streams) => {
                         encrypt: false
                     }
                 },
+                {
+                    attrType: AttributeType.BOOLEAN,
+                    data: {
+                        key: 'available',
+                        required: true, // required
+                        defaultValue: false, // default (optional)
+                        arr: false // array (optional)
+                    }
+                },
             ]
         }
     ];
