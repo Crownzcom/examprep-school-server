@@ -67,6 +67,29 @@ const generatePassword = (length = 8) => {
 router.post('/create-users', async (req, res) => {
     try {
         const usersData = req.body;
+        /*===rq.body format============
+            [
+                {
+                    **"userType": "student", 
+                    **"firstName": "Mary",
+                    **"lastName": "Doe",
+                    "otherName": null,
+                    **"gender": "female",
+                    **"studClass": "P7",  //Primary [P1, P2, --- P7] Secondary [S1, S2, S3, --- S6]
+                    **"stream": "a",
+                    **"label": ["student"]  //Label - ["student"] / ["admin"]
+                },
+                {
+                    **"userType": "admin",
+                    **"firstName": "Alex",
+                    **"lastName": "Doe",
+                    "otherName": null,
+                    **"gender": "male",
+                    **"label": ["admin"]
+                }
+            ]
+        */
+
         const createdUsers = [];
         let counters = await readCounters();
 
@@ -164,6 +187,40 @@ router.post('/create-users', async (req, res) => {
         // await writeCounters(counters);
 
         res.status(200).json(createdUsers);
+
+        /**Response format sent back to the client-side
+        [
+            {
+                "userID": "STU001",
+                "firstName": "Mary",
+                "lastName": "Doe",
+                "otherName": null,
+                "email": "st001@student.school",
+                "studClass": "P7",
+                "stream": "a",
+                "password": "6cced7f2"
+            },
+            {
+                "userID": "STU002",
+                "firstName": "David",
+                "lastName": "Doe",
+                "otherName": null,
+                "email": "st002@student.school",
+                "studClass": "P6",
+                "stream": "b",
+                "password": "37cf8541"
+            },
+            {
+                "userID": "ADM001",
+                "firstName": "Alex",
+                "lastName": "Doe",
+                "otherName": null,
+                "email": "ad001@admin.school",
+                "password": "b1cf4233"
+            }
+        ]
+         */
+
     } catch (error) {
         res.status(500).json({ error: error.message });
     }

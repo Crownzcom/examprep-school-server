@@ -32,7 +32,7 @@ const updateEnvFile = async (key, value) => {
         envVars[key] = value;
 
         const envFileContent = await Object.keys(envVars)
-            .map(key => key === 'APPWRITE_ENDPOINT' ? `${key}=${envVars[key]}` : `${key}="${envVars[key]}"`)
+            .map(key => key === 'APPWRITE_ENDPOINT' ? `${key}="${envVars[key]}"` : `${key}="${envVars[key]}"`)
             .join('\n');
 
         fs.writeFileSync(envFilePath, envFileContent);

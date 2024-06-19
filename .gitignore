@@ -1,2 +1,3 @@
 /otherFiles
 node_modules/
+.env
