@@ -1,0 +1,36 @@
+[
+  {
+    "userID": "STU001",
+    "studName": "Mary Doe ",
+    "firstName": "Mary",
+    "lastName": "Doe",
+    "otherName": "",
+    "gender": "female",
+    "email": "st001@student.school",
+    "studClass": "P7",
+    "stream": "a",
+    "label": [
+      "student"
+    ],
+    "userType": "student",
+    "accountCreationDate": "06/18/2024, 13:32:35",
+    "Results": []
+  },
+  {
+    "userID": "STU002",
+    "studName": "David Doe ",
+    "firstName": "David",
+    "lastName": "Doe",
+    "otherName": "",
+    "gender": "male",
+    "email": "st002@student.school",
+    "studClass": "P6",
+    "stream": "b",
+    "label": [
+      "student"
+    ],
+    "userType": "student",
+    "accountCreationDate": "06/18/2024, 13:32:36",
+    "Results": []
+  }
+]

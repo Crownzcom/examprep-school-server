@@ -1,0 +1,2 @@
+userID,firstName,lastName,otherName,gender,email,phone,label,accountCreationDate,userType,$id
+ADM001,Alex,Doe,,male,ad001@admin.school,,"['admin']",2024-06-18T10:32:36.198+00:00,admin,66716244001550a62e8f
