@@ -121,12 +121,13 @@ const createAttribute = async (dbID, colID, attrType, data) => {
                 );
                 break;
             case AttributeType.BOOLEAN:
+                console.log('Boolean Attribute', options);
                 response = await databases.createBooleanAttribute(
                     dbID,
                     colID,
                     options.key,
                     options.required || false,
-                    options.defaultValue !== undefined ? options.defaultValue : null,
+                    options.defaultValue !== undefined ? options.defaultValue : false,
                     options.arr || false
                 );
                 break;

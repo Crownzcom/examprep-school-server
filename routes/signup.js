@@ -112,7 +112,7 @@ router.post('/create-users', async (req, res) => {
             const email = generateEmail(userType, counter);
             const userID = generateUserID(userType, counter);
             const password = generatePassword();
-            const name = `${firstName} ${lastName} ${otherName}`.trim();
+            const name = `${firstName} ${lastName} ${otherName === null ? otherName : ''}`.trim();
 
             console.log(`userID: ${userID}, email: ${email}`);
 
