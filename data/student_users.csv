@@ -1,3 +1,5 @@
 userID,firstName,lastName,otherName,gender,studClass,stream,label,accountCreationDate,email,userType,$id
 STU001,Mary,Doe,,female,P7,a,"['student']",2024-06-19T08:23:53.533+00:00,st001@student.school,student,66729599002e72b0c083
-STU002,David,Doe,,male,P6,b,"['student']",2024-06-19T08:23:53.774+00:00,st002@student.school,student,66729599003c6513cf95
+STU002,David,Doe,,male,P6,b,"['student']",2024-06-19T08:23:53.774+00:00,st002@student.school,student,66729599003c6513cf95userID,firstName,lastName,otherName,gender,studClass,stream,label,accountCreationDate,email,userType,$id
+STU004,David,Doe,,male,P6,b,"['student']",2024-06-19T12:29:40.883+00:00,st004@student.school,student,6672cf35000a01241198userID,firstName,lastName,otherName,gender,studClass,stream,label,accountCreationDate,email,userType,$id
+STU003,Mary,Doe,,female,P7,a,"['student']",2024-06-19T12:29:40.268+00:00,st003@student.school,student,6672cf340033619bc327

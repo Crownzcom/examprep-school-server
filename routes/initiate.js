@@ -188,6 +188,12 @@ const createAttribute = async (dbID, colID, attrType, data) => {
             console.log("Creating Index for stream");
             await createIndex(dbID, colID, options.key, 'key', [`${options.key}`], ['ASC'])
         }
+        else if (options.key === "examID") {
+            await delay(1000);
+            console.log('INDEX Attribute response: ' + JSON.stringify(response));
+            console.log("Creating Index for stream");
+            await createIndex(dbID, colID, options.key, 'key', [`${options.key}`], ['ASC'])
+        }
     } catch (e) {
         console.log(`Failed to create ${attrType} attribute - ${options.key}`, e);
         throw new Error(`Failed to create ${attrType} attribute - ${options.key}`, e);

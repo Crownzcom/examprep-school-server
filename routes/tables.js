@@ -355,7 +355,7 @@ export const tableInitialization = async (classes, streams) => {
                         key: 'examQuestions',
                         size: 100000,
                         required: true,
-                        arr: false,
+                        arr: true,
                         encrypt: false
                     }
                 },
