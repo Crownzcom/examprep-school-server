@@ -6,6 +6,7 @@ import authentication from './routes/login.js';
 import createAccount from './routes/signup.js';
 import fetchStudents from './routes/fetchStudents.js';
 import appwriteApi from './routes/createDocs.js';
+import exams from './routes/exams.js'
 
 const app = express();
 const port = 3001;
@@ -34,6 +35,9 @@ app.use('/students', fetchStudents);
 
 //Create collection docs
 app.use('/appwrite', appwriteApi);
+
+//Route for exam related processes
+app.use('/exam', exams)
 
 app.listen(port, () => {
     console.log(`Server is running on http://localhost:${port}`);

@@ -42,6 +42,13 @@ const student_Table_id = process.env.STUDENT_TABLE_ID;
 const results_Table_id = process.env.STUDENT_RESULTS_TABLE_ID;
 const classes_Table_id = process.env.CLASSES_TABLE_ID;
 
+//subject exam tables
+
+const social_studies_table_id = process.env.SOCIAL_STUDIES_TABLE_ID
+const science_table_id = process.env.SCIENCE_TABLE_ID
+const mathematics_table_id = process.env.MATHEMATICS_TABLE_ID
+const english_language_table_id = process.env.ENGLISH_LANGUAGE_TABLE_ID
+
 export {
     account,
     databases,

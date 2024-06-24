@@ -591,10 +591,10 @@ export const examSubjectTablesInitialization = async (subjectNames) => {
                 attrType: AttributeType.STRING,
                 data: {
                     key: 'questions',
-                    size: 100000,
+                    size: 1000000,
                     required: false,
                     defaultValue: null,
-                    arr: true,
+                    arr: false,
                     encrypt: false
                 }
             },

@@ -23,7 +23,7 @@ const router = express.Router();
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 
-const countersFilePath = path.join(__dirname, '..', 'data', 'counters.json');
+const countersFilePath = path.join(__dirname, '..', 'data', 'user_account_creation_counters.json');
 
 // Function to simulate delay
 const delay = (ms) => new Promise(resolve => setTimeout(resolve, ms));

@@ -6,7 +6,7 @@ import {
     databases,
     ID,
 } from '../appwriteConfig.js';
-import { AttributeType, tableInitialization, examSubjectTablesInitialization, examSubjectTableNames, classTablesInitialization } from '../routes/tables.js';
+import { AttributeType, tableInitialization, examSubjectTablesInitialization, examSubjectTableNames, classTablesInitialization } from '../utils/tables.js';
 import { writeMultipleDocuments } from '../utils/appwriteUtils.js';
 
 const router = express.Router();
@@ -44,7 +44,6 @@ const updateEnvFile = async (key, value) => {
         console.log(`Failed to update environment variable: KEY - ${key}, VALUE - ${value}`);
     }
 };
-
 
 // Stores the form data temporarily for SSE updates
 let tempFormData = {};
