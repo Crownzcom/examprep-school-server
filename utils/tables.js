@@ -280,9 +280,9 @@ export const tableInitialization = async (classes, streams) => {
                     attrType: AttributeType.STRING,
                     data: {
                         key: 'results',
-                        size: 100000,
-                        required: true,
-                        arr: true,
+                        size: 1000000,
+                        required: fals,
+                        arr: false,
                         encrypt: false
                     }
                 },
@@ -321,7 +321,16 @@ export const tableInitialization = async (classes, streams) => {
                         key: 'finalPossibleMarks',
                         required: true,
                         min: 1,
-                        max: null,
+                        max: 20000,
+                    }
+                },
+                {
+                    attrType: AttributeType.FLOAT,
+                    data: {
+                        key: 'durationMINS',
+                        required: false,
+                        min: 0,
+                        max: 20000,
                     }
                 }
             ]
@@ -353,7 +362,7 @@ export const tableInitialization = async (classes, streams) => {
                     attrType: AttributeType.STRING,
                     data: {
                         key: 'examQuestions',
-                        size: 100000,
+                        size: 1000000,
                         required: true,
                         arr: true,
                         encrypt: false

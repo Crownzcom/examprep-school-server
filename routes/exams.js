@@ -9,7 +9,9 @@ import { fileURLToPath } from "url";
 import {
     databases,
     database_id,
+    results_Table_id,
     Query,
+    ID,
 } from "../appwriteConfig.js";
 
 dotenv.config();
@@ -20,6 +22,7 @@ const writeFile = promisify(fs.writeFile);
 const readFile = promisify(fs.readFile);
 
 const examCountersFilePath = path.join(dirname, '..', 'data', 'exam_creation_counter.json');
+const resultCountersFilePath = path.join(dirname, '..', 'data', 'results_creation_counter.json');
 
 // ==================== FUNCTIONS ====================
 const fetchQuestionsForSubject = async (collection_id) => {
@@ -54,6 +57,8 @@ const fetchQuestionsForSubject = async (collection_id) => {
 };
 
 const selectRandomQuestions = async (subjectName, questionsData, categoryIds, collection_id, qtnHistory) => {
+
+    console.log('Subject: ', subjectName);
     let updatedQtnHistory = {
         collection_id,
         questionsJSON: { ...qtnHistory?.questionsJSON },
@@ -69,7 +74,7 @@ const selectRandomQuestions = async (subjectName, questionsData, categoryIds, co
         let attemptedQuestionIds = qtnHistory?.questionsJSON?.[categoryId] || [];
         let allQuestionIds = category.questions.map((question) => question.id);
 
-        console.log('Attempted questions: ' + attemptedQuestionIds.length + '\n allQuestionIds: ' + allQuestionIds.length);
+        // console.log('Attempted questions: ' + attemptedQuestionIds.length + '\n allQuestionIds: ' + allQuestionIds.length);
 
         // Reset the attempted question IDs if they exceed or match all available questions
         if (attemptedQuestionIds.length >= allQuestionIds.length) {
@@ -87,6 +92,24 @@ const selectRandomQuestions = async (subjectName, questionsData, categoryIds, co
         let numQuestions = 1;
         if (subjectName === 'social_studies' && (categoryId === 36 || categoryId === 51)) {
             numQuestions = 5;
+        }
+
+        if (subjectName === 'english_language') {
+            if (categoryId === 31) {
+                numQuestions = 20;
+            }
+            if (categoryId === 1 || categoryId === 6) {
+                numQuestions = 5;
+            }
+            if (categoryId === 18) {
+                numQuestions = 3;
+            }
+            if (categoryId === 6 || categoryId === 16 || categoryId === 21 || categoryId === 23 || categoryId === 25 || categoryId === 27 || categoryId === 29) {
+                numQuestions = 2;
+            }
+            if (categoryId === 51 || categoryId === 52 || categoryId === 53 || categoryId === 54 || categoryId === 55) {
+                numQuestions = 1;
+            }
         }
 
         if (availableQuestions.length < numQuestions) {
@@ -117,18 +140,26 @@ const selectRandomQuestions = async (subjectName, questionsData, categoryIds, co
             }
         }
 
-        const updatedQuestions = selectedQuestions.map((question) => {
+        // Update questions with additional details
+        const updatedQuestions = selectedQuestions.map(question => {
             const updatedQuestion = { ...question };
 
+            if (isEitherOrFormat(question)) {
+                updatedQuestion.id = `${categoryId}_${category.questions.indexOf(question)}`;
+            }
+
+            // Handling 'either' and 'or' questions
             if (question.either && question.either.sub_questions) {
                 updatedQuestion.either.sub_questions = question.either.sub_questions.map((subQ, index) => ({
                     ...subQ,
+                    id: `${question.either.id}_sub_${index}`
                 }));
             }
 
             if (question.or && question.or.sub_questions) {
                 updatedQuestion.or.sub_questions = question.or.sub_questions.map((subQ, index) => ({
                     ...subQ,
+                    id: `${question.or.id}_sub_${index}`
                 }));
             }
 
@@ -145,6 +176,14 @@ const selectRandomQuestions = async (subjectName, questionsData, categoryIds, co
         updatedQtnHistory,
         categoriesWithQuestions: categoriesWithQuestions.filter((cat) => cat !== null),
     };
+};
+
+/**
+ * 
+ * Check if is `EITHER` or `OR` type question
+ */
+const isEitherOrFormat = (question) => {
+    return question.hasOwnProperty('either') && question.hasOwnProperty('or');
 };
 
 // Retrieve User Questions History
@@ -181,7 +220,7 @@ const getAttemptedQuestions = async (collection_id, subjectName) => {
 
 // Update User Questions History
 const updateQuestionHistory = async (questionsJSON, subjectName, collection_id) => {
-    console.log('updatedQtnHistory: ', questionsJSON);
+    // console.log('updatedQtnHistory: ', questionsJSON);
     let fileName = 'attemptedQuestionHistory.json';
     const filePath = path.join(dirname, "..", "data", fileName);
 
@@ -241,16 +280,16 @@ const updateQuestionHistory = async (questionsJSON, subjectName, collection_id) 
 };
 
 // Function to read exam counters from the JSON file
-const readCounters = async () => {
+const readExamCounters = async () => {
     if (!fs.existsSync(examCountersFilePath)) {
-        fs.writeFileSync(examCountersFilePath, JSON.stringify({ studentCounter: 0, adminCounter: 0 }));
+        fs.writeFileSync(examCountersFilePath, JSON.stringify({ examCounter: 0 }));
     }
     const counters = fs.readFileSync(examCountersFilePath, 'utf8');
     return JSON.parse(counters);
 };
 
 //Function to write exam counters to the JSON file
-const writeCounters = async (counters) => {
+const writeExamCounters = async (counters) => {
     fs.writeFileSync(examCountersFilePath, JSON.stringify(counters, null, 2));
 };
 
@@ -259,7 +298,27 @@ const generateExamID = (counter) => {
     return `EXM${String(counter).padStart(3, '0')}`;
 }
 
+// Function to read Result counters from the JSON file
+const readResultCounters = async () => {
+    if (!fs.existsSync(resultCountersFilePath)) {
+        fs.writeFileSync(resultCountersFilePath, JSON.stringify({ resultCounter: 0 }));
+    }
+    const counters = fs.readFileSync(resultCountersFilePath, 'utf8');
+    return JSON.parse(counters);
+};
+
+//Function to write Result counters to the JSON file
+const writeResultCounters = async (counters) => {
+    fs.writeFileSync(resultCountersFilePath, JSON.stringify(counters, null, 2));
+};
+
+// Function to Results ID
+const generateResultID = (counter) => {
+    return `RES${String(counter).padStart(4, '0')}`;
+}
+
 // ==================== ROUTES =================
+//Create an exam
 router.get("/fetch-exam", async (req, res) => {
     const { collection_id, subjectName } = req.query;
 
@@ -288,7 +347,7 @@ router.get("/fetch-exam", async (req, res) => {
         await updateQuestionHistory(randomQuestions.updatedQtnHistory.questionsJSON, subjectName, collection_id);
 
         //Generate Exam ID
-        let counters = await readCounters();
+        let counters = await readExamCounters();
 
         counters.examCounter += 1;
 
@@ -297,13 +356,68 @@ router.get("/fetch-exam", async (req, res) => {
         const examID = generateExamID(counter)
 
         //Update the exam counter json file
-        await writeCounters(counters);
+        await writeExamCounters(counters);
 
-        res.status(200).json({ questions: randomQuestions.categoriesWithQuestions, examID: examID });
+        res.status(200).json({ examID: examID, questions: randomQuestions.categoriesWithQuestions, allQtns: questionsData });
 
     } catch (error) {
         console.log('Error fetching exam:', error);
         res.status(500).json({ message: "An error occurred while fetching the exam." });
+    }
+});
+
+//Save exam results
+router.post('/submit-exam', async (req, res) => {
+    const data = req.body;
+
+    try {
+        console.log('Creating document for student results', data);
+
+        //Generate Results ID
+        let counters = await readResultCounters();
+
+        counters.resultCounter += 1;
+
+        const counter = counters.resultCounter
+
+        const resultID = generateResultID(counter)
+
+        //Update the exam counter json file
+        await writeResultCounters(counters);
+
+        console.log('Updating the results table');
+        const result = await databases.createDocument(
+            database_id,
+            results_Table_id,
+            resultID,
+            // ID.unique(),
+            data
+        );
+        console.log('successfully created document for student results');
+        res.status(201).json({ message: 'Document created successfully', result });
+
+    } catch (error) {
+        console.log('Failed to create document for student results');
+        res.status(500).json({ message: 'Error creating document', error });
+    }
+});
+
+//Fetch results using a resultsID
+router.get("/fetch-result", async (req, res) => {
+    const { resultID, studID } = req.query;
+
+    console.log("Request body: " + JSON.stringify(req.query));
+    if (resultID === null || resultID === undefined || studID === null || studID === undefined) {
+        return res.status(400).json({ message: `Results fetching failed. Missing either resultID (${resultID}) or studID (${studID})` });
+    }
+
+    try {
+        const results = await databases.listDocuments(database_id, results_Table_id, [Query.equal('$id', resultID)]);
+        console.log('Finsihed fetching: ', results);
+        res.status(200).json({ results: results.documents[0].results });
+    } catch (error) {
+        console.log('Error fetching results:', error);
+        res.status(500).json({ message: "An error occurred while fetching the results.", error: error });
     }
 });
 
